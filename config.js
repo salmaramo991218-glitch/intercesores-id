@@ -1,6 +1,5 @@
-// Configuración del sitio Intercesores Id.
-// Pega aquí la URL de tu aplicación web de Google Apps Script (termina en /exec).
-// Instrucciones en README.md, sección "1. Backend".
+﻿// Configuración del sitio Intercesores Id.
 window.CONFIG = {
-  API_URL: 'PEGA_AQUI_TU_URL_/exec'
+  API_URL: 'https://script.google.com/macros/s/AKfycbxLwF7mG0VaooBNpvx1hUopPLsxank3DctWc8mzsmyXzWLQYHyS8EUTsD9TXZSO7Hrn/exec'
 };
+
