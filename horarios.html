@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Horarios de oración · Id</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3f5f6;--card:#fff;--ink:#0f2730;--mut:#5f7179;--line:#e1e7ea;--id:#10303d;--soft:#e6eef1}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Montserrat,system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--id);outline-offset:2px}
+.band{background:var(--id);color:#fff;padding:22px 18px 26px}
+.in{max-width:560px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:52px;height:52px;border-radius:50%}
+.brand b{font-weight:700;font-size:15px}.brand span{display:block;font-size:13px;opacity:.75}
+.brand a{margin-left:auto;color:#fff;font-size:13px;font-weight:600;text-decoration:none;min-height:40px;display:inline-flex;align-items:center;padding:0 12px;border:1px solid rgba(255,255,255,.35);border-radius:20px;white-space:nowrap}
+h1{font:700 clamp(24px,6.4vw,34px)/1.12 Montserrat,sans-serif;margin:22px 0 0}
+.band p{margin:6px 0 0;opacity:.8;font-size:15px}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:rgba(255,255,255,.12);padding:4px;border-radius:14px;margin-top:18px}
+.seg button{min-height:42px;border-radius:10px;font-weight:600;color:rgba(255,255,255,.75);font-size:14px}
+.seg button[aria-pressed=true]{background:#fff;color:var(--id)}
+.app{max-width:560px;margin:0 auto;padding:18px 18px 120px}
+.views{display:flex;gap:22px;border-bottom:1px solid var(--line)}
+.views button{padding:12px 0;font-weight:600;color:var(--mut);border-bottom:2px solid transparent;margin-bottom:-1px}
+.views button[aria-selected=true]{color:var(--id);border-color:var(--id)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px}
+.link{color:var(--id);font-weight:700;font-size:14px;min-height:44px;padding:0 4px;white-space:nowrap}
+.days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;margin:18px 0 6px}
+.day{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 0 8px;border-radius:14px;background:var(--card);border:1px solid var(--line);min-height:68px}
+.day small{font-size:11px;color:var(--mut);font-weight:600}
+.day strong{font-size:18px;font-weight:700}
+.day i{width:6px;height:6px;border-radius:50%}
+.day.has i{background:var(--id)}
+.day[aria-pressed=true]{background:var(--id);border-color:var(--id);color:#fff}
+.day[aria-pressed=true] small{color:rgba(255,255,255,.75)}.day[aria-pressed=true].has i{background:#fff}
+.day.past{opacity:.4}
+.part{font-size:13px;font-weight:700;color:var(--mut);margin:20px 4px 8px}
+.slots{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.slot{display:flex;align-items:center;gap:14px;width:100%;min-height:62px;padding:10px 16px;text-align:left;border-top:1px solid var(--line)}
+.slot:first-child{border-top:0}
+.slot .t{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;width:7.4em}
+.slot .s{flex:1;color:var(--mut);font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.slot .k{flex:none;width:26px;height:26px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center}
+.slot.on{background:var(--soft)}.slot.on .s{color:var(--id);font-weight:700}
+.slot.on .k{background:var(--id);border-color:var(--id)}
+.slot.on .k::after{content:"";width:7px;height:12px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.tools{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);padding:12px 18px calc(12px + env(safe-area-inset-bottom))}
+.bar .in{display:flex;align-items:center;gap:12px}
+.bar .n{flex:1}.bar .n b{font-weight:700;font-size:20px}
+.bar .n span{display:block;color:var(--mut);font-size:12px;margin-top:2px}
+.pri{background:var(--id);color:#fff;font-weight:700;min-height:48px;padding:0 18px;border-radius:14px;font-size:14px}
+.pri:disabled{opacity:.4;cursor:default}
+.toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);max-width:min(520px,calc(100% - 32px));background:var(--ink);color:#fff;padding:12px 16px;border-radius:12px;font-size:14px;z-index:9}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:18px}
+.stat b{display:block;font-weight:700;font-size:26px;color:var(--id);line-height:1.1}
+.stat span{font-size:12px;color:var(--mut)}
+.tday{margin-top:10px}
+.tday h3{margin:0 0 8px;font-size:15px;font-weight:700;display:flex;justify-content:space-between;gap:8px}
+.tday h3 span{color:var(--mut);font-weight:500;font-size:13px;white-space:nowrap}
+.meter{height:6px;border-radius:3px;background:var(--line);overflow:hidden;margin-bottom:10px}
+.meter i{display:block;height:100%;background:var(--id);border-radius:3px}
+.tr{display:flex;gap:12px;padding:7px 0;border-top:1px solid var(--line);font-size:14px}
+.tr:first-of-type{border-top:0}
+.tr .t{width:7.6em;flex:none;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tr .p{color:var(--mut)}
+.empty{color:var(--mut);font-size:14px;margin:0}
+.reg{max-width:440px;margin:0 auto;padding:36px 20px 48px;text-align:center}
+.reg img{width:120px;height:120px;border-radius:50%}
+.reg h1{margin-top:18px}
+.reg p{color:var(--mut);margin:8px 0 0}
+.reg form{display:grid;gap:8px;text-align:left;margin-top:26px}
+.reg label{font-weight:600;font-size:14px;margin-top:8px}
+.reg input{width:100%;font:16px Montserrat,sans-serif;padding:13px 14px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.reg .pri{margin-top:16px;width:100%}
+.hint{font-size:12px;color:var(--mut);margin:2px 0 0}
+.sheet{position:fixed;inset:0;background:rgba(10,25,32,.5);display:grid;align-items:end;z-index:8}
+.sheet .box{background:var(--card);border-radius:20px 20px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom));max-height:80vh;overflow:auto;max-width:560px;width:100%;margin:0 auto}
+.sheet h2{margin:0 0 4px;font-size:18px}
+.gc{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
+.gc a{color:#fff;background:var(--id);text-decoration:none;font-weight:700;font-size:13px;padding:10px 14px;border-radius:12px;white-space:nowrap}
+/* horarios */
+.hband{background:var(--id);color:#fff;text-align:center;padding:32px 18px 26px}
+.hband img{width:120px;height:120px;border-radius:50%}
+.hcard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin-top:10px}
+.hcard h3{margin:0 0 6px;font-size:15px;font-weight:700}
+.htr{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:56px;padding:8px 0;border-top:1px solid var(--line);font-weight:600;font-variant-numeric:tabular-nums;color:var(--id);font-size:17px;text-align:left}
+.htr:first-of-type{border-top:0}
+.htr em{font-style:normal;font-size:13px;font-weight:700;background:var(--id);color:#fff;padding:8px 14px;border-radius:12px;white-space:nowrap}
+.htr.mine em{background:var(--soft);color:var(--id)}
+.ok{display:grid;place-items:center;width:64px;height:64px;border-radius:50%;background:var(--id);margin:6px auto 12px}
+.ok::after{content:"";width:16px;height:28px;border:solid #fff;border-width:0 4px 4px 0;transform:rotate(45deg) translate(-2px,-3px)}
+.fbox form{display:grid;gap:8px;margin-top:14px}
+.fbox label{font-weight:600;font-size:14px;margin-top:6px}
+.fbox input{width:100%;font:16px Montserrat,sans-serif;padding:13px 14px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.when{display:flex;gap:12px;align-items:center;background:var(--soft);border-radius:14px;padding:12px 14px;margin-top:10px}
+.when b{display:block;font-size:16px}.when span{color:var(--mut);font-size:13px}
+.slot .r{display:block;color:var(--id);font-size:12px;font-weight:600;margin-top:2px;white-space:normal}
+.center{text-align:center}
+[hidden]{display:none!important}
+@media(max-width:380px){.days{gap:4px}.day strong{font-size:16px}.slot .t{width:6.8em}}
+</style>
+</head>
+<body data-modo="horarios" data-horarios="horarios.html">
+
+<!-- ===================== HORARIOS ===================== -->
+<div id="H" hidden>
+  <header class="hband">
+    <img src="logo.png" alt="Id · Recuerda quién eres">
+    <h1>Horarios de oración</h1>
+    <div class="in"><div class="seg" id="hWeeks"></div></div>
+  </header>
+  <div class="app" style="padding-bottom:48px">
+    <p class="empty center" style="margin-top:6px">Elige un horario y reserva tu cita de oración. Los intercesores de ese turno orarán por ti.</p>
+    <div id="hDays"><p class="empty center" style="margin-top:28px">Cargando horarios…</p></div>
+  </div>
+  <div class="sheet" id="rSheet" hidden><div class="box fbox">
+    <div id="rForm">
+      <h2>Reserva tu cita de oración</h2>
+      <div class="when"><div><b id="rWhen"></b><span>Turno de 2 horas</span></div></div>
+      <form id="rF">
+        <label for="rNom">Nombre completo</label>
+        <input type="text" id="rNom" maxlength="60" autocomplete="name" required>
+        <label for="rCel">Celular</label>
+        <input type="tel" id="rCel" maxlength="20" autocomplete="tel" inputmode="tel" required placeholder="300 123 4567">
+        <label for="rCor">Correo</label>
+        <input type="email" id="rCor" maxlength="80" autocomplete="email" inputmode="email" required placeholder="tucorreo@gmail.com">
+        <p class="hint">Te enviaremos la cita a tu correo para que quede en tu calendario.</p>
+        <button class="pri" type="submit" id="rB" style="margin-top:10px;width:100%">Reservar mi cita</button>
+        <button type="button" class="link" id="rX">Cancelar</button>
+      </form>
+    </div>
+    <div id="rDone" class="center" hidden>
+      <div class="ok"></div>
+      <h2>¡Tu cita quedó reservada!</h2>
+      <p class="empty" id="rDoneWhen" style="font-size:16px;color:var(--ink);font-weight:700;margin-top:6px"></p>
+      <p class="empty" id="rDoneTxt" style="margin-top:8px"></p>
+      <a class="pri" id="rGcal" href="#" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;text-decoration:none;margin-top:16px">Agregar a mi calendario</a>
+      <button class="link" id="rOk" style="margin-top:6px">Listo</button>
+    </div>
+  </div></div>
+</div>
+
+<!-- ===================== INTERCESORES ===================== -->
+<div id="R" class="reg" hidden>
+  <img src="logo.png" alt="Id · Recuerda quién eres">
+  <h1 id="regT">Te damos la bienvenida al equipo de intercesores</h1>
+  <p id="regS">Antes de elegir tus turnos, cuéntanos quién eres.</p>
+  <form id="regF">
+    <label for="fNom">Nombre completo</label>
+    <input type="text" id="fNom" maxlength="60" autocomplete="name" required>
+    <label for="fCel">Celular</label>
+    <input type="tel" id="fCel" maxlength="20" autocomplete="tel" inputmode="tel" required placeholder="300 123 4567">
+    <label for="fCor">Correo</label>
+    <input type="email" id="fCor" maxlength="80" autocomplete="email" inputmode="email" required placeholder="tucorreo@gmail.com">
+    <p class="hint">Si ya te registraste en otro celular o computador, escribe el mismo número y recuperamos tus turnos. A tu correo te llegarán las citas de oración de tus turnos. Tu celular y tu correo solo los ve el coordinador.</p>
+    <button class="pri" type="submit" id="regB">Continuar</button>
+    <button type="button" class="link" id="regX" hidden>Cancelar</button>
+  </form>
+</div>
+
+<div id="I" hidden>
+<header class="band"><div class="in">
+  <div class="brand"><img src="logo.png" alt="Id"><div><b>Intercesores Id</b><span id="hello">Recuerda quién eres</span></div>
+    <a id="toH" href="#">Ver horarios</a></div>
+  <h1 id="q">¿En qué turnos puedes orar esta semana?</h1>
+  <p id="range"></p>
+  <div class="seg" id="weeks"></div>
+</div></header>
+<div class="app">
+  <nav class="views" role="tablist">
+    <button role="tab" data-v="mi" aria-selected="true">Mis turnos</button>
+    <button role="tab" data-v="eq" aria-selected="false">Equipo</button>
+    <button role="tab" data-v="yo" aria-selected="false">Mis datos</button>
+  </nav>
+  <section id="v-mi">
+    <div class="days" id="days"></div>
+    <div id="slots"></div>
+    <div class="tools">
+      <button class="link" id="copy">Repetir semana anterior</button>
+      <button class="link" id="clear">Borrar este día</button>
+    </div>
+  </section>
+  <section id="v-eq" hidden>
+    <div class="stats">
+      <div class="card stat"><b id="sH">0</b><span>horas de oración</span></div>
+      <div class="card stat"><b id="sP">0</b><span>intercesores</span></div>
+      <div class="card stat"><b id="sD">0/7</b><span>días cubiertos</span></div>
+    </div>
+    <div id="team"></div>
+  </section>
+  <section id="v-yo" hidden>
+    <div class="card" style="margin-top:18px">
+      <p class="empty">Nombre</p><p style="margin:0 0 10px;font-weight:700" id="yoN">—</p>
+      <p class="empty">Celular</p><p style="margin:0 0 10px;font-weight:700" id="yoC">—</p>
+      <p class="empty">Correo</p><p style="margin:0 0 6px;font-weight:700;overflow-wrap:anywhere" id="yoE">—</p>
+      <div class="tools"><button class="link" id="edit">Editar mis datos</button><button class="link" id="out">Salir</button></div>
+    </div>
+  </section>
+</div>
+<div class="bar"><div class="in">
+  <div class="n"><b id="tot">0 turnos</b><span id="saved">Toca un turno para ofrecerlo</span></div>
+  <button class="pri" id="gcal" disabled>Agendar en mi calendario</button>
+</div></div>
+<div class="sheet" id="sheet" hidden><div class="box">
+  <h2>Agrega tus turnos a Google Calendar</h2>
+  <p class="empty">Toca cada turno para abrirlo en Google Calendar y guardarlo.</p>
+  <div id="gcList" style="margin-top:10px"></div>
+  <button class="pri" style="width:100%;margin-top:14px" id="sheetX">Listo</button>
+</div></div>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+
+<script src="config.js"></script>
+<script>
+(function(){
+var MODO=document.body.dataset.modo||'intercesores',URL_APP=document.body.dataset.url||'';
+var TURNS=[6,8,10,12,14,16,18,20],DUR=2;
+var DL=['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'],DS=['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
+var PARTS=[['Mañana',[6,8,10]],['Tarde',[12,14,16]],['Noche',[18,20]]];
+function $(s){return document.querySelector(s)}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function pad(n){return String(n).padStart(2,'0')}
+function ymd(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
+function monday(d){var x=new Date(d);x.setHours(0,0,0,0);x.setDate(x.getDate()-((x.getDay()+6)%7));return x}
+function addD(d,n){var x=new Date(d);x.setDate(x.getDate()+n);return x}
+function fmt(d){return d.toLocaleDateString('es',{day:'numeric',month:'long'})}
+function hh(h){return h+':00'}function tl(h){return hh(h)+' – '+hh(h+DUR)}
+function valid(k){return TURNS.indexOf(+String(k).split('-')[1])>=0}
+var today=new Date(),thisMon=monday(today),nextMon=addD(thisMon,7),todayIdx=(today.getDay()+6)%7,nowH=today.getHours();
+function started(wk,d,h){return wk===ymd(thisMon)&&(d<todayIdx||(d===todayIdx&&h<=nowH))}
+var toastT;function toast(t){var e=$('#toast');e.textContent=t;e.hidden=false;clearTimeout(toastT);toastT=setTimeout(function(){e.hidden=true},4500)}
+function api(fn){var args=[].slice.call(arguments,1),U=(window.CONFIG&&CONFIG.API_URL)||'';
+  if(!U||U.indexOf('PEGA_AQUI')>=0)return Promise.reject(new Error('Falta configurar API_URL en config.js.'));
+  var get={datosHorarios:'horarios',datosEquipo:'equipo',datosReservas:'reservas'}[fn];
+  var req=get?fetch(U+(U.indexOf('?')<0?'?':'&')+'action='+get+'&t='+Date.now()):fetch(U,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:fn,args:args})});
+  return req.then(function(r){if(!r.ok)throw new Error('El servidor respondió '+r.status+'.');return r.json()}).then(function(j){if(!j||!j.ok)throw new Error((j&&j.error)||'Respuesta inválida del servidor.');return j.data})}
+function errMsg(e){return (e&&e.message)||'No se pudo conectar. Revisa tu internet e intenta de nuevo.'}
+function weekSeg(sel,cur){return [[thisMon,'Esta semana'],[nextMon,'Próxima semana']].map(function(x){return '<button data-w="'+ymd(x[0])+'" aria-pressed="'+(ymd(x[0])===cur)+'">'+x[1]+'</button>'}).join('')}
+
+/* ===================== HORARIOS ===================== */
+if(MODO==='horarios'){
+  $('#H').hidden=false;var hw=ymd(thisMon),HD=null;
+  function hRender(){
+    $('#hWeeks').innerHTML=weekSeg('#hWeeks',hw);
+    if(!HD)return;
+    var ws=hw===ymd(nextMon)?nextMon:thisMon,t=(HD.semanas||{})[hw]||{},cur=hw===ymd(thisMon);
+    var html=DL.map(function(dn,d){if(cur&&d<todayIdx)return '';
+      var hs=TURNS.filter(function(h){return t[d+'-'+h]>0&&!(cur&&d===todayIdx&&h+DUR<=new Date().getHours())});
+      return hs.length?'<div class="hcard"><h3>'+dn+' '+addD(ws,d).getDate()+'</h3>'+hs.map(function(h){var k=d+'-'+h,mine=MIS.indexOf(hw+'|'+k)>=0;
+        return '<button class="htr'+(mine?' mine':'')+'" data-k="'+k+'" data-d="'+d+'"><span>'+tl(h)+'</span><em>'+(mine?'Reservado ✓':'Reservar')+'</em></button>'}).join('')+'</div>':''}).join('');
+    $('#hDays').innerHTML=html||'<p class="empty center" style="margin-top:28px">Aún no hay horarios para esta semana.</p>';
+  }
+  $('#hWeeks').addEventListener('click',function(e){var b=e.target.closest('[data-w]');if(b){hw=b.dataset.w;hRender()}});
+  var MIS=[],YO={},SEL=null;try{MIS=JSON.parse(localStorage.getItem('id_mis_citas')||'[]');YO=JSON.parse(localStorage.getItem('id_mis_datos')||'{}')}catch(e){}
+  function whenTxt(wk,k){var p=k.split('-').map(Number),ws=wk===ymd(nextMon)?nextMon:thisMon;return DL[p[0]]+' '+addD(ws,p[0]).getDate()+' de '+addD(ws,p[0]).toLocaleDateString('es',{month:'long'})+' · '+tl(p[1])}
+  $('#hDays').addEventListener('click',function(e){var b=e.target.closest('.htr');if(!b)return;var k=b.dataset.k;
+    if(MIS.indexOf(hw+'|'+k)>=0){toast('Ya tienes una cita reservada en este horario.');return}
+    SEL={wk:hw,k:k};$('#rWhen').textContent=whenTxt(hw,k);$('#rNom').value=YO.nombre||'';$('#rCel').value=YO.celular||'';$('#rCor').value=YO.correo||'';
+    $('#rForm').hidden=false;$('#rDone').hidden=true;$('#rSheet').hidden=false});
+  function closeR(){$('#rSheet').hidden=true}
+  $('#rX').addEventListener('click',closeR);$('#rOk').addEventListener('click',closeR);
+  $('#rSheet').addEventListener('click',function(e){if(e.target.id==='rSheet')closeR()});
+  $('#rF').addEventListener('submit',function(e){e.preventDefault();if(!SEL)return;
+    var n=$('#rNom').value.trim(),c=$('#rCel').value.trim(),m=$('#rCor').value.trim();
+    if(!n||c.replace(/\D/g,'').length<7){toast('Escribe tu nombre y un celular válido.');return}
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(m)){toast('Escribe un correo válido.');return}
+    var b=$('#rB');b.disabled=true;b.textContent='Reservando…';
+    api('reservar',SEL.wk,SEL.k,n,c,m).then(function(r){
+      YO={nombre:n,celular:c,correo:m};MIS.push(SEL.wk+'|'+SEL.k);try{localStorage.setItem('id_mis_datos',JSON.stringify(YO));localStorage.setItem('id_mis_citas',JSON.stringify(MIS.slice(-40)))}catch(e){}
+      var p=SEL.k.split('-').map(Number),ws=SEL.wk===ymd(nextMon)?nextMon:thisMon,day=ymd(addD(ws,p[0])).replace(/-/g,'');
+      $('#rGcal').href='https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent('Cita de oración · Intercesores Id')+'&details='+encodeURIComponent('Los intercesores del retiro Id orarán por ti en este horario.')+'&dates='+day+'T'+pad(p[1])+'0000/'+day+'T'+pad(p[1]+DUR)+'0000&ctz=America%2FBogota';
+      $('#rDoneWhen').textContent=whenTxt(SEL.wk,SEL.k);
+      $('#rDoneTxt').textContent='Te enviamos la invitación a '+m+'. Acéptala para que quede en tu calendario. Los intercesores de este turno orarán por ti.';
+      $('#rForm').hidden=true;$('#rDone').hidden=false;hRender()})
+    .catch(function(err){toast(errMsg(err))}).then(function(){b.disabled=false;b.textContent='Reservar mi cita'})});
+  function hLoad(){api('datosHorarios').then(function(d){HD=d;hRender()}).catch(function(e){if(!HD)$('#hDays').innerHTML='<p class="empty center" style="margin-top:28px">'+esc(/config\.js/.test(errMsg(e))?errMsg(e):'No pudimos cargar los horarios. Recarga la página.')+'</p>'})}
+  hRender();hLoad();setInterval(hLoad,60000);
+  return;
+}
+
+/* ===================== INTERCESORES ===================== */
+var me=null;try{me=JSON.parse(localStorage.getItem('id_intercesor')||'null')}catch(e){}
+var weekStart=thisMon,week=ymd(thisMon),day=todayIdx,view='mi',team=[],saveT=null,saving=false;
+function slots(){return new Set(((me&&me.turnos||{})[week]||[]).filter(valid))}
+function isThis(){return week===ymd(thisMon)}
+function store(){try{localStorage.setItem('id_intercesor',JSON.stringify(me))}catch(e){}}
+function teamTurns(wk){var t={};team.forEach(function(a){if(me&&a.h===me.h)return;((a.turnos||{})[wk]||[]).filter(valid).forEach(function(k){(t[k]=t[k]||[]).push(a.nombre||'Intercesor')})});
+  if(me)((me.turnos||{})[wk]||[]).filter(valid).forEach(function(k){(t[k]=t[k]||[]).unshift('Tú')});return t}
+
+$('#toH').href=document.body.dataset.horarios||(URL_APP?URL_APP+'?p=horarios':'#');
+function showReg(edit){$('#R').hidden=false;$('#I').hidden=true;$('#regX').hidden=!edit;
+  $('#regT').textContent=edit?'Mis datos':'Te damos la bienvenida al equipo de intercesores';
+  $('#regS').textContent=edit?'Actualiza tu nombre o tu celular.':'Antes de elegir tus turnos, cuéntanos quién eres.';
+  $('#fNom').value=me&&me.nombre||'';$('#fCel').value=me&&me.celular||'';$('#fCor').value=me&&me.correo||'';$('#regB').textContent=edit?'Guardar':'Continuar';scrollTo(0,0)}
+function showApp(){$('#R').hidden=true;$('#I').hidden=false;render()}
+$('#regX').addEventListener('click',showApp);
+$('#edit').addEventListener('click',function(){showReg(true)});
+$('#out').addEventListener('click',function(){me=null;try{localStorage.removeItem('id_intercesor')}catch(e){}showReg(false)});
+$('#regF').addEventListener('submit',function(e){e.preventDefault();
+  var n=$('#fNom').value.trim(),c=$('#fCel').value.trim(),m=$('#fCor').value.trim();
+  if(!n||c.replace(/\D/g,'').length<7){toast('Escribe tu nombre y un número de celular válido.');return}
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(m)){toast('Escribe un correo válido.');return}
+  var b=$('#regB');b.disabled=true;b.textContent='Guardando…';
+  api('registrar',n,c,m).then(function(r){
+    var keep=me&&me.id===r.id?me.turnos:null;me=r;if(keep&&!Object.keys(r.turnos||{}).length){me.turnos=keep;api('guardarTurnos',me.id,me.turnos)}
+    store();showApp();loadTeam();toast('¡Listo, '+n.split(' ')[0]+'! Ya puedes elegir tus turnos.')})
+  .catch(function(err){toast(errMsg(err))}).then(function(){b.disabled=false;b.textContent=$('#regX').hidden?'Continuar':'Guardar'})});
+
+function renderHead(){
+  $('#q').textContent=isThis()?'¿En qué turnos puedes orar esta semana?':'¿En qué turnos puedes orar la próxima semana?';
+  $('#range').textContent='Del '+fmt(weekStart)+' al '+fmt(addD(weekStart,6))+' · turnos de 2 horas';
+  $('#hello').textContent=me&&me.nombre?'Hola, '+me.nombre.split(' ')[0]:'Recuerda quién eres';
+  $('#weeks').innerHTML=weekSeg('#weeks',week);
+}
+function renderDays(){var s=slots();
+  $('#days').innerHTML=DS.map(function(n,i){var has=false;s.forEach(function(k){if(k.indexOf(i+'-')===0)has=true});var past=isThis()&&i<todayIdx;
+    return '<button class="day'+(has?' has':'')+(past?' past':'')+'" data-d="'+i+'" aria-pressed="'+(i===day)+'" aria-label="'+DL[i]+'"><small>'+n+'</small><strong>'+addD(weekStart,i).getDate()+'</strong><i></i></button>'}).join('')}
+function renderSlots(){var s=slots(),tt=teamTurns(week);
+  $('#slots').innerHTML=PARTS.map(function(p){var r='';
+    p[1].forEach(function(h){if(started(week,day,h))return;var k=day+'-'+h,on=s.has(k),o=(tt[k]||[]).filter(function(x){return x!=='Tú'}).length;
+      var st=on?'Oraré en este turno':o?(o===1?'1 intercesor ya ora aquí':o+' intercesores ya oran aquí'):'Nadie aún';
+      var rv=on?resFor(week,k):[];
+      r+='<button class="slot'+(on?' on':'')+'" data-k="'+k+'" aria-pressed="'+on+'"><span class="t">'+tl(h)+'</span><span class="s">'+esc(st)+(rv.length?'<span class="r">Orarás por: '+esc(rv.join(', '))+'</span>':'')+'</span><span class="k"></span></button>'});
+    return r?'<div class="part">'+p[0]+'</div><div class="slots">'+r+'</div>':''}).join('')||'<p class="empty" style="margin-top:24px">Los turnos de este día ya pasaron. Elige otro día o la próxima semana.</p>'}
+function renderBar(){var n=slots().size;$('#tot').textContent=n+(n===1?' turno':' turnos');$('#gcal').disabled=!n;
+  if(!saving&&!saveT)$('#saved').textContent=n?(n*DUR)+' horas de oración':'Toca un turno para ofrecerlo'}
+function renderTeam(){var tt=teamTurns(week),ppl={},byD=[{},{},{},{},{},{},{}],tot=0;
+  Object.keys(tt).forEach(function(k){var p=k.split('-').map(Number);byD[p[0]][p[1]]=tt[k];tot+=tt[k].length;tt[k].forEach(function(n){ppl[n]=1})});
+  $('#sH').textContent=tot*DUR;$('#sP').textContent=Object.keys(ppl).length;$('#sD').textContent=byD.filter(function(o){return Object.keys(o).length}).length+'/7';
+  $('#team').innerHTML=byD.map(function(o,d){var hs=Object.keys(o).map(Number).sort(function(a,b){return a-b});
+    return '<div class="card tday"><h3>'+DL[d]+' '+addD(weekStart,d).getDate()+'<span>'+hs.length+' de '+TURNS.length+' turnos</span></h3><div class="meter"><i style="width:'+Math.round(hs.length/TURNS.length*100)+'%"></i></div>'+
+      (hs.length?hs.map(function(h){var rv=resFor(week,d+'-'+h);return '<div class="tr"><span class="t">'+tl(h)+'</span><span class="p">'+esc(o[h].join(', '))+(rv.length?'<br><span style="color:var(--id);font-weight:600">Por: '+esc(rv.join(', '))+'</span>':'')+'</span></div>'}).join(''):'<p class="empty">Aún nadie ha tomado turnos este día.</p>')+'</div>'}).join('')}
+function renderYo(){$('#yoN').textContent=me&&me.nombre||'—';$('#yoC').textContent=me&&me.celular||'—';$('#yoE').textContent=me&&me.correo||'—'}
+var RES=[];function resFor(wk,k){return RES.filter(function(r){return r.semana===wk&&r.turno===k}).map(function(r){return r.nombre})}
+function render(){renderHead();renderDays();renderSlots();renderBar();renderTeam();renderYo()}
+function setWeek(w){week=w;weekStart=w===ymd(nextMon)?nextMon:thisMon;day=isThis()?todayIdx:0;render()}
+function setSlots(set){me.turnos=me.turnos||{};me.turnos[week]=Array.from(set);store();renderDays();renderSlots();queueSave();renderBar();renderTeam()}
+function queueSave(){clearTimeout(saveT);$('#saved').textContent='Guardando…';saveT=setTimeout(save,700)}
+function save(){saveT=null;if(saving){saveT=setTimeout(save,500);return}saving=true;
+  api('guardarTurnos',me.id,me.turnos).then(function(){$('#saved').textContent='Guardado ✓'})
+  .catch(function(e){$('#saved').textContent='No se guardó';toast(errMsg(e))}).then(function(){saving=false})}
+function loadTeam(){api('datosReservas').then(function(r){RES=r||[];if(!$('#I').hidden){renderSlots();renderTeam()}}).catch(function(){});api('datosEquipo').then(function(t){team=t||[];var mine=me&&team.filter(function(a){return a.h===me.h})[0];
+  if(mine&&!saving&&!saveT){me.turnos=mine.turnos||{};me.nombre=mine.nombre||me.nombre;store()}if(!$('#I').hidden)render()}).catch(function(){})}
+
+$('#weeks').addEventListener('click',function(e){var b=e.target.closest('[data-w]');if(b&&b.dataset.w!==week)setWeek(b.dataset.w)});
+$('#days').addEventListener('click',function(e){var b=e.target.closest('[data-d]');if(!b)return;day=+b.dataset.d;renderDays();renderSlots()});
+$('#slots').addEventListener('click',function(e){var b=e.target.closest('.slot');if(!b)return;var s=slots(),k=b.dataset.k;s.has(k)?s.delete(k):s.add(k);setSlots(s)});
+$('#clear').addEventListener('click',function(){var s=slots();Array.from(s).forEach(function(k){if(k.indexOf(day+'-')===0)s.delete(k)});setSlots(s)});
+$('#copy').addEventListener('click',function(){var prev=((me.turnos||{})[ymd(addD(weekStart,-7))]||[]).filter(valid);
+  if(!prev.length){toast('No tomaste turnos la semana anterior.');return}
+  var s=slots();prev.forEach(function(k){var p=k.split('-').map(Number);if(!started(week,p[0],p[1]))s.add(k)});setSlots(s);toast('Copié tus turnos de la semana anterior.')});
+document.querySelector('.views').addEventListener('click',function(e){var b=e.target.closest('[data-v]');if(!b)return;view=b.dataset.v;
+  document.querySelectorAll('[data-v]').forEach(function(x){x.setAttribute('aria-selected',x.dataset.v===view)});
+  ['mi','eq','yo'].forEach(function(v){$('#v-'+v).hidden=v!==view});if(view==='eq')loadTeam()});
+
+/* Google Calendar: enlaces para agregar cada turno */
+function gcDate(d,h){var x=addD(weekStart,d);return ymd(x).replace(/-/g,'')+'T'+pad(h)+'0000'}
+$('#gcal').addEventListener('click',function(){
+  var runs=[];Array.from(slots()).map(function(k){return k.split('-').map(Number)}).sort(function(a,c){return a[0]-c[0]||a[1]-c[1]}).forEach(function(x){var l=runs[runs.length-1];if(l&&l.d===x[0]&&l.e===x[1])l.e=x[1]+DUR;else runs.push({d:x[0],s:x[1],e:x[1]+DUR})});
+  var tz=Intl.DateTimeFormat().resolvedOptions().timeZone||'America/Bogota';
+  $('#gcList').innerHTML=runs.map(function(r){var u='https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent('Turno de oración · Intercesores Id')+'&details='+encodeURIComponent('Turno de oración por los participantes del retiro Id.')+'&dates='+gcDate(r.d,r.s)+'/'+gcDate(r.d,r.e)+'&ctz='+encodeURIComponent(tz);
+    return '<div class="gc"><span><b>'+DL[r.d]+' '+addD(weekStart,r.d).getDate()+'</b><br><span class="empty">'+hh(r.s)+' – '+hh(r.e)+'</span></span><a href="'+esc(u)+'" target="_blank" rel="noopener">Agregar</a></div>'}).join('');
+  $('#toast').hidden=true;$('#sheet').hidden=false});
+$('#sheetX').addEventListener('click',function(){$('#sheet').hidden=true});
+$('#sheet').addEventListener('click',function(e){if(e.target.id==='sheet')$('#sheet').hidden=true});
+
+/* arranque */
+if(!me||!me.correo){showReg(false)}
+else{showApp();api('registrar',me.nombre,me.celular,me.correo).then(function(r){var local=me.turnos;me=r;if(!Object.keys(r.turnos||{}).length&&local&&Object.keys(local).length){me.turnos=local;api('guardarTurnos',me.id,local)}store();render()}).catch(function(){})}
+loadTeam();setInterval(loadTeam,60000);
+if(todayIdx>=3&&me&&!((me.turnos||{})[ymd(nextMon)]||[]).length&&!((me.turnos||{})[week]||[]).filter(valid).length)setWeek(ymd(nextMon));
+})();
+</script>
+</body>
+</html>
